@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dubai Jackpot - Play, Win, and Enjoy!">
+    <title>Dubai Jackpot</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3 {
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        header {
+            background-color: #ff5722;
+            color: white;
+            padding: 15px 0;
+        }
+        nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .section {
+            padding: 50px 0;
+        }
+        .btn {
+            background-color: #ff5722;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #e64a19;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+        .auth-form input {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .auth-form button {
+            background-color: #ff5722;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .auth-form button:hover {
+            background-color: #e64a19;
+        }
+        #gameSection {
+            display: none;
+        }
+        #ticketDisplay, #resultDisplay {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff5722;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Dubai Jackpot</h1>
+            <nav>
+                <a href="#signup">Sign Up</a>
+                <a href="#login">Login</a>
+                <a href="#gameSection">Play Lottery</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sign-Up Section -->
+    <section id="signup" class="section">
+        <div class="container">
+            <h2>Sign Up</h2>
+            <form class="auth-form" id="signupForm">
+                <input type="text" id="signupUsername" placeholder="Username" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="text" id="signupReferralCode" placeholder="Referral Code (Optional)">
+                <button type="submit">Sign Up</button>
+            </form>
+            <p id="signupMessage"></p>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="section">
+        <div class="container">
+            <h2>Login</h2>
+            <form class="auth-form" id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="loginMessage"></p>
+        </div>
+    </section>
+
+    <!-- Lottery Game Section -->
+    <section id="gameSection" class="section">
+        <div class="container">
+            <h2>Welcome to Dubai Jackpot!</h2>
+            <button class="btn" id="generateTicketBtn">Generate Lottery Ticket</button>
+            <div id="ticketDisplay"></div>
+            <button class="btn" id="checkResultBtn">Check Result</button>
+            <div id="resultDisplay"></div>
+        </div>
+    </section>
+
+    <!-- Payment Section with PayPal -->
+    <section id="paymentSection" class="section">
+        <div class="container">
+            <h2>Buy Lottery Ticket</h2>
+            <p>Price: ₹100 per ticket</p>
+            <!-- PayPal Payment Link -->
+            <a href="https://www.paypal.me/RaviKashyap1912/100" target="_blank" class="btn">Pay ₹100 via PayPal</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2>About Dubai Jackpot</h2>
+            <p>Dubai Jackpot एक रोमांचक गेम है जिसमें आप अपनी किस्मत आजमा सकते हैं और शानदार पुरस्कार जीत सकते हैं। सुरक्षित और पारदर्शी लॉटरी सिस्टम के साथ खेलें।</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Email: support@dubaijackpot.com</p>
+            <p>Phone: +971 123 4567</p>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // Sign-Up Functionality with Referral Code
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const referralCode = document.getElementById('signupReferralCode').value;
+
+            // Check if user exists
+            if (localStorage.getItem(username)) {
+                document.getElementById('signupMessage').textContent = 'User already exists!';
+            } else {
+                // Store user info
+                localStorage.setItem(username, JSON.stringify({password: password, balance: 0, referredBy: referralCode}));
+
+                // If referral code is used, give ₹100 to referrer
+                if (referralCode && localStorage.getItem(referralCode)) {
+                    let referrer = JSON.parse(localStorage.getItem(referralCode));
+                    referrer.balance += 100;  // Add ₹100 to the referrer's balance
+                    localStorage.setItem(referralCode, JSON.stringify(referrer));
+                    document.getElementById('signupMessage').textContent = 'Sign-up successful! You earned ₹100 for referring a friend!';
+                } else {
+                    document.getElementById('signupMessage').textContent = 'Sign-up successful!';
+                }
+
+                document.getElementById('signupForm').reset();
+            }
+        });
+
+        // Login Functionality
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            let user = localStorage.getItem(username);
+            if (user && JSON.parse(user).password === password) {
+                document.getElementById('loginMessage').textContent = 'Login successful!';
+                document.getElementById('gameSection').style.display = 'block';
+                document.getElementById('login').style.display = 'none';
+            } else {
+                document.getElementById('loginMessage').textContent = 'Invalid credentials!';
+            }
+        });
+
+        // Lottery Ticket Generation
+        document.getElementById('generateTicketBtn').addEventListener('click', () => {
+            const numbers = Array.from({ length: 6 }, () => Math.floor(Math.random() * 49) + 1);
+            document.getElementById('ticketDisplay').textContent = Your Ticket: ${numbers.join(', ')};
+        });
+
+        // Check Result
+        document.getElementById('checkResultBtn').addEventListener('click', () => {
+            const winningNumbers = Array.from({ length: 6 }, () => Math.floor(Math.random() * 49) + 1);
+            document.getElementById('resultDisplay').textContent = Winning Numbers: ${winningNumbers.join(', ')};
+        });
+    </script>
+</body>
+</html>
